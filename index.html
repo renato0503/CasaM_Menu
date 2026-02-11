@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CASA MASSIMA | Enterprise Platform</title>
+    <title>CASA MASSIMA | Simulador Logístico</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -19,34 +19,50 @@
         }
 
         * { box-sizing: border-box; outline: none; }
-        body { margin: 0; padding: 0; background-color: var(--bg-body); color: var(--text-main); font-family: 'Open Sans', sans-serif; }
+        body { margin: 0; padding: 0; background-color: var(--bg-body); color: var(--text-main); font-family: 'Open Sans', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
-        /* HEADER */
+        /* --- SIDEBAR (Barra Lateral) --- */
+        .sidebar { width: 260px; background: #181818; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; z-index: 10; flex-shrink: 0; }
+        
+        .brand-area { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .logo-img { height: 40px; width: auto; }
+        .brand-text h2 { margin: 0; font-family: 'Montserrat'; font-size: 16px; color: var(--brand-gold); }
+        .brand-text span { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+        .nav-menu { list-style: none; padding: 0; flex: 1; }
+        .nav-item { margin-bottom: 5px; }
+        .nav-link { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 6px; color: var(--text-muted); text-decoration: none; transition: 0.2s; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .nav-link:hover { background: rgba(158, 42, 43, 0.1); color: var(--brand-gold); }
+        
+        /* Estado Ativo (Página Atual) */
+        .nav-link.active { background: rgba(158, 42, 43, 0.15); color: var(--brand-gold); border-left: 3px solid var(--brand-red); }
+        .nav-link i { width: 20px; text-align: center; }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .app-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
+
+        /* HEADER SUPERIOR (Mantido do original) */
         .navbar {
             background: linear-gradient(to bottom, #2b1b1b, #1a1a1a);
             border-bottom: 3px solid var(--brand-red);
             padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            flex-shrink: 0;
         }
-        .logo-area { display: flex; align-items: center; gap: 15px; }
-        .logo-img { height: 50px; width: auto; }
-        .brand-text h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 20px; color: var(--brand-gold); margin: 0; letter-spacing: 1px; }
-        .brand-text span { font-size: 10px; text-transform: uppercase; color: #fff; letter-spacing: 2px; }
         
-        .action-btn { background: var(--brand-red); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .action-btn { background: var(--brand-red); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;}
         .action-btn:hover { background: #b71c1c; }
         .action-btn.secondary { background: var(--bg-input); border: 1px solid var(--border); }
         .action-btn.secondary:hover { border-color: var(--brand-gold); }
 
-        /* LAYOUT */
-        .main-container { max-width: 1600px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 400px 1fr; gap: 30px; }
+        /* LAYOUT GRID (Mantido) */
+        .main-container { max-width: 1600px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 400px 1fr; gap: 30px; width: 100%; }
 
-        /* CARDS */
+        /* ESTILOS ORIGINAIS (Cards, Inputs, Modal) */
         .card { background: var(--bg-panel); border-radius: 6px; border: 1px solid var(--border); padding: 25px; margin-bottom: 20px; position: relative; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .card-title { font-family: 'Montserrat', sans-serif; font-size: 13px; color: var(--brand-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; border-left: 3px solid var(--brand-red); padding-left: 10px; }
 
-        /* INPUTS */
         .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .input-group { margin-bottom: 15px; }
         .input-label { display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; font-weight: 600; }
@@ -54,7 +70,6 @@
         .frm-input:focus { border-color: var(--brand-gold); background: #333; }
         .frm-input.locked { background: #222; color: var(--brand-gold); border: 1px solid var(--brand-brown); font-weight: bold; cursor: not-allowed; }
 
-        /* MODAL CUSTO FIXO */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-content { background: var(--bg-panel); width: 600px; border-radius: 8px; border: 1px solid var(--brand-gold); box-shadow: 0 0 30px rgba(0,0,0,0.7); animation: slideIn 0.3s ease; }
         .modal-header { background: #2b1b1b; padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
@@ -64,16 +79,13 @@
         .cost-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
         .cost-row label { font-size: 12px; color: #ccc; }
         .cost-row input { width: 120px; text-align: right; }
-        .total-display { font-size: 18px; color: var(--brand-gold); font-weight: bold; text-align: right; margin-top: 15px; }
 
-        /* KPI & CHARTS */
         .kpi-master-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
         .kpi-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 6px; padding: 20px; text-align: center; }
         .kpi-val { font-size: 32px; font-weight: 700; font-family: 'Montserrat', sans-serif; display: block; margin: 10px 0; }
         .kpi-sub { font-size: 11px; color: var(--text-muted); }
         .reverse-calc { background: linear-gradient(160deg, #2b1b1b 0%, #1e1e1e 100%); border: 1px solid var(--brand-brown); }
 
-        /* TABLE */
         .data-table-container { max-height: 200px; overflow-y: auto; margin-top: 10px; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
         th { text-align: left; color: var(--brand-gold); padding: 8px; border-bottom: 1px solid var(--border); background: var(--bg-panel); position: sticky; top: 0; }
@@ -81,165 +93,204 @@
         tr:hover td { background: rgba(255,255,255,0.05); cursor: pointer; color: white; }
 
         @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @media print { .navbar, .action-btn, .modal-overlay { display: none; } body { background: white; color: black; } }
+        @media print { .navbar, .action-btn, .modal-overlay, .sidebar { display: none; } body { background: white; color: black; display: block; } .main-container { display: block; } }
     </style>
 </head>
 <body>
 
-<div class="modal-overlay" id="modalCustos">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span style="color:white; font-weight:700; font-family:'Montserrat'">CENTRO DE CUSTOS & RATEIO</span>
-            <i class="fa fa-times" style="cursor:pointer; color:var(--text-muted)" onclick="toggleModal(false)"></i>
-        </div>
-        <div class="modal-body">
-            <p style="font-size:11px; color:var(--text-muted); margin-bottom:15px">Insira os custos mensais fixos da empresa/veículo para calcular o rateio exato.</p>
-            
-            <h4 style="color:var(--brand-gold); font-size:12px; border-bottom:1px solid #444; margin-bottom:10px">1. CUSTOS ADMINISTRATIVOS (Mensal)</h4>
-            <div class="cost-row"><label>Aluguel Escritório/Garagem</label><input type="number" id="cAluguel" class="frm-input" value="0" oninput="calcRateio()"></div>
-            <div class="cost-row"><label>Sistemas/Software/Internet</label><input type="number" id="cSist" class="frm-input" value="0" oninput="calcRateio()"></div>
-            <div class="cost-row"><label>Salários Administrativos</label><input type="number" id="cAdmSal" class="frm-input" value="0" oninput="calcRateio()"></div>
-            <div class="cost-row"><label>Contabilidade/Jurídico</label><input type="number" id="cContab" class="frm-input" value="0" oninput="calcRateio()"></div>
-
-            <h4 style="color:var(--brand-gold); font-size:12px; border-bottom:1px solid #444; margin:15px 0 10px">2. CUSTOS VEÍCULO/FROTA (Mensal)</h4>
-            <div class="cost-row"><label>Salário Motorista (+ Encargos)</label><input type="number" id="cMotora" class="frm-input" value="3500" oninput="calcRateio()"></div>
-            <div class="cost-row"><label>Seguro da Frota/Carga (Mensal)</label><input type="number" id="cSeguro" class="frm-input" value="400" oninput="calcRateio()"></div>
-            <div class="cost-row"><label>IPVA/Licenciamento (Anual / 12)</label><input type="number" id="cIpva" class="frm-input" value="300" oninput="calcRateio()"></div>
-            <div class="cost-row"><label>Depreciação Veículo</label><input type="number" id="cDeprec" class="frm-input" value="1200" oninput="calcRateio()"></div>
-            <div class="cost-row"><label>Rastreador/Monitoramento</label><input type="number" id="cRastro" class="frm-input" value="150" oninput="calcRateio()"></div>
-
-            <div style="background:#2b1b1b; padding:15px; margin-top:20px; border-radius:6px; border:1px solid var(--border)">
-                <div class="cost-row" style="border:none">
-                    <label style="color:white; font-weight:bold">TOTAL CUSTO FIXO MENSAL:</label>
-                    <span id="lblTotalFixo" style="color:var(--brand-gold); font-weight:bold">R$ 0,00</span>
-                </div>
-                <hr style="border-color:#444">
-                <div class="cost-row" style="border:none">
-                    <label>Capacidade Mensal de Carga (KG):</label>
-                    <input type="number" id="cCapacidade" class="frm-input" value="40000" style="color:var(--brand-gold)" oninput="calcRateio()">
-                </div>
-                <div class="cost-row" style="border:none">
-                    <label style="color:var(--success)">FATOR DE RATEIO (R$/KG):</label>
-                    <span id="lblRateioFinal" style="color:var(--success); font-weight:bold; font-size:18px">R$ 0,00</span>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="action-btn secondary" onclick="toggleModal(false)">Cancelar</button>
-            <button class="action-btn" onclick="applyRateio()">APLICAR AO SIMULADOR</button>
+<aside class="sidebar">
+    <div class="brand-area">
+        <img src="logo.png" alt="CM" class="logo-img" onerror="this.style.display='none'">
+        <div class="brand-text">
+            <h2>CASA MASSIMA</h2>
+            <span>Enterprise System</span>
         </div>
     </div>
-</div>
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <a href="https://renato0503.github.io/BI_Casa_Massima/" class="nav-link active">
+                <i class="fa fa-truck-fast"></i> Simulador Logístico
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="https://renato0503.github.io/CasaM_RankVendedor/" class="nav-link">
+                <i class="fa fa-chart-line"></i> Performance Comercial
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="https://renato0503.github.io/CasaM_EquipeVendas/" class="nav-link">
+                <i class="fa fa-users"></i> Equipe de Vendas
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="https://renato0503.github.io/CasaM_Comissoes/" class="nav-link">
+                <i class="fa fa-file-invoice-dollar"></i> Comissões
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="https://renato0503.github.io/CasaM_RotasZonas/" class="nav-link">
+                <i class="fa fa-map-location-dot"></i> Rotas & Zonas
+            </a>
+        </li>
+    </ul>
+</aside>
 
-<nav class="navbar">
-    <div class="logo-area">
-        <img src="logo.png" alt="CM" class="logo-img" onerror="this.style.display='none'; document.getElementById('txtLogo').style.display='block'">
-        <div class="brand-text" id="txtLogo">
-            <h1>CASA MASSIMA</h1>
-            <span>Intelligence System</span>
-        </div>
-    </div>
-    <div style="display:flex; gap:10px">
-        <button class="action-btn secondary" onclick="toggleModal(true)"><i class="fa fa-calculator"></i> Detalhar Custo Fixo</button>
-        <button class="action-btn" onclick="window.print()"><i class="fa fa-print"></i> PDF</button>
-    </div>
-</nav>
+<div class="app-content">
 
-<div class="main-container">
-
-    <div class="side-col">
-        <div class="card">
-            <div class="card-header"><span class="card-title">Base de Dados</span></div>
-            <div style="border:1px dashed var(--border); padding:15px; text-align:center; cursor:pointer; border-radius:6px" onclick="document.getElementById('fileIn').click()">
-                <i class="fa fa-file-csv" style="color:var(--brand-red)"></i> <span style="font-size:11px; color:var(--text-muted)">Importar Tabela</span>
-                <input type="file" id="fileIn" hidden onchange="handleFileUpload(event)">
+    <div class="modal-overlay" id="modalCustos">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span style="color:white; font-weight:700; font-family:'Montserrat'">CENTRO DE CUSTOS & RATEIO</span>
+                <i class="fa fa-times" style="cursor:pointer; color:var(--text-muted)" onclick="toggleModal(false)"></i>
             </div>
-            <div class="data-table-container" id="tablePreview" style="display:none"><div id="tableData"></div></div>
-        </div>
+            <div class="modal-body">
+                <p style="font-size:11px; color:var(--text-muted); margin-bottom:15px">Insira os custos mensais fixos da empresa/veículo para calcular o rateio exato.</p>
+                
+                <h4 style="color:var(--brand-gold); font-size:12px; border-bottom:1px solid #444; margin-bottom:10px">1. CUSTOS ADMINISTRATIVOS (Mensal)</h4>
+                <div class="cost-row"><label>Aluguel Escritório/Garagem</label><input type="number" id="cAluguel" class="frm-input" value="0" oninput="calcRateio()"></div>
+                <div class="cost-row"><label>Sistemas/Software/Internet</label><input type="number" id="cSist" class="frm-input" value="0" oninput="calcRateio()"></div>
+                <div class="cost-row"><label>Salários Administrativos</label><input type="number" id="cAdmSal" class="frm-input" value="0" oninput="calcRateio()"></div>
+                <div class="cost-row"><label>Contabilidade/Jurídico</label><input type="number" id="cContab" class="frm-input" value="0" oninput="calcRateio()"></div>
 
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Simulador Operacional</span>
-                <i class="fa fa-rotate-left" style="cursor:pointer; font-size:11px; color:#666" onclick="location.reload()"></i>
-            </div>
+                <h4 style="color:var(--brand-gold); font-size:12px; border-bottom:1px solid #444; margin:15px 0 10px">2. CUSTOS VEÍCULO/FROTA (Mensal)</h4>
+                <div class="cost-row"><label>Salário Motorista (+ Encargos)</label><input type="number" id="cMotora" class="frm-input" value="3500" oninput="calcRateio()"></div>
+                <div class="cost-row"><label>Seguro da Frota/Carga (Mensal)</label><input type="number" id="cSeguro" class="frm-input" value="400" oninput="calcRateio()"></div>
+                <div class="cost-row"><label>IPVA/Licenciamento (Anual / 12)</label><input type="number" id="cIpva" class="frm-input" value="300" oninput="calcRateio()"></div>
+                <div class="cost-row"><label>Depreciação Veículo</label><input type="number" id="cDeprec" class="frm-input" value="1200" oninput="calcRateio()"></div>
+                <div class="cost-row"><label>Rastreador/Monitoramento</label><input type="number" id="cRastro" class="frm-input" value="150" oninput="calcRateio()"></div>
 
-            <div class="input-group">
-                <label class="input-label">Rota / Cliente</label>
-                <input type="text" id="inRota" class="frm-input" value="ROTA SINOP - CARGA MISTA">
-            </div>
-
-            <div class="input-grid">
-                <div class="input-group"><label class="input-label">KM Ida/Volta</label><input type="number" id="inKm" class="frm-input" value="1050" oninput="calculate()"></div>
-                <div class="input-group"><label class="input-label">Consumo (Km/L)</label><input type="number" id="inKmL" class="frm-input" value="2.2" step="0.1" oninput="calculate()"></div>
-            </div>
-
-            <div class="input-grid">
-                <div class="input-group"><label class="input-label">Diesel (R$)</label><input type="number" id="inDiesel" class="frm-input" value="6.52" oninput="calculate()"></div>
-                <div class="input-group"><label class="input-label">Manutenção (R$/Km)</label><input type="number" id="inMaint" class="frm-input" value="0.85" oninput="calculate()"></div>
-            </div>
-
-             <div class="input-grid">
-                <div class="input-group"><label class="input-label">Pedágios</label><input type="number" id="inTolls" class="frm-input" value="150" oninput="calculate()"></div>
-                <div class="input-group"><label class="input-label">Diária Motorista</label><input type="number" id="inDriver" class="frm-input" value="200" oninput="calculate()"></div>
-            </div>
-
-            <hr style="border-top:1px solid #333; margin:15px 0">
-
-            <div class="input-grid">
-                <div class="input-group"><label class="input-label">Peso Carga (Kg)</label><input type="number" id="inPesoTotal" class="frm-input" value="5000" oninput="calculate()"></div>
-                <div class="input-group">
-                    <label class="input-label" style="color:var(--brand-gold)">Rateio Fixo (R$/Kg)</label>
-                    <div style="display:flex; gap:5px">
-                        <input type="number" id="inFixo" class="frm-input locked" value="0.14" readonly>
-                        <button onclick="toggleModal(true)" style="background:none; border:1px solid #444; color:#aaa; cursor:pointer; border-radius:4px"><i class="fa fa-edit"></i></button>
+                <div style="background:#2b1b1b; padding:15px; margin-top:20px; border-radius:6px; border:1px solid var(--border)">
+                    <div class="cost-row" style="border:none">
+                        <label style="color:white; font-weight:bold">TOTAL CUSTO FIXO MENSAL:</label>
+                        <span id="lblTotalFixo" style="color:var(--brand-gold); font-weight:bold">R$ 0,00</span>
+                    </div>
+                    <hr style="border-color:#444">
+                    <div class="cost-row" style="border:none">
+                        <label>Capacidade Mensal de Carga (KG):</label>
+                        <input type="number" id="cCapacidade" class="frm-input" value="40000" style="color:var(--brand-gold)" oninput="calcRateio()">
+                    </div>
+                    <div class="cost-row" style="border:none">
+                        <label style="color:var(--success)">FATOR DE RATEIO (R$/KG):</label>
+                        <span id="lblRateioFinal" style="color:var(--success); font-weight:bold; font-size:18px">R$ 0,00</span>
                     </div>
                 </div>
             </div>
-
-            <div class="input-grid">
-                <div class="input-group"><label class="input-label">Venda Unit. (R$)</label><input type="number" id="inPrecoUnit" class="frm-input" value="185" style="border-color:var(--brand-gold)" oninput="calculate()"></div>
-                <div class="input-group"><label class="input-label">Peso Unit. (Kg)</label><input type="number" id="inPesoUnit" class="frm-input" value="10" oninput="calculate()"></div>
+            <div class="modal-footer">
+                <button class="action-btn secondary" onclick="toggleModal(false)">Cancelar</button>
+                <button class="action-btn" onclick="applyRateio()">APLICAR AO SIMULADOR</button>
             </div>
-            
-            <div class="input-group"><label class="input-label">Comissão Broker (%)</label><input type="number" id="inCommPerc" class="frm-input" value="30" oninput="calculate()"></div>
         </div>
     </div>
 
-    <div class="main-col">
-        <div class="card">
-            <div class="card-header"><span class="card-title">Resultado Financeiro</span></div>
-            <div class="kpi-master-row">
-                <div class="kpi-box" id="boxProfit">
-                    <span class="input-label">Lucro Líquido Real</span>
-                    <span class="kpi-val" id="resLucro">R$ 0,00</span>
-                    <span class="kpi-sub" id="resMargemPerc">0%</span>
-                </div>
-                <div class="kpi-box" style="border-top:2px solid var(--brand-gold)">
-                    <span class="input-label">Comissão Broker</span>
-                    <span class="kpi-val" id="resComissao" style="color:var(--brand-gold)">R$ 0,00</span>
-                    <span class="kpi-sub">Receita Bruta</span>
-                </div>
+    <nav class="navbar">
+        <div class="logo-area">
+            <div class="brand-text" id="txtLogo">
+                <h1>SIMULADOR LOGÍSTICO</h1>
+                <span>Análise de Viabilidade por Rota</span>
             </div>
-            <div style="height:220px"><canvas id="mainChart"></canvas></div>
+        </div>
+        <div style="display:flex; gap:10px">
+            <button class="action-btn secondary" onclick="toggleModal(true)"><i class="fa fa-calculator"></i> Detalhar Custo Fixo</button>
+            <button class="action-btn" onclick="window.print()"><i class="fa fa-print"></i> PDF</button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+
+        <div class="side-col">
+            <div class="card">
+                <div class="card-header"><span class="card-title">Base de Dados</span></div>
+                <div style="border:1px dashed var(--border); padding:15px; text-align:center; cursor:pointer; border-radius:6px" onclick="document.getElementById('fileIn').click()">
+                    <i class="fa fa-file-csv" style="color:var(--brand-red)"></i> <span style="font-size:11px; color:var(--text-muted)">Importar Tabela</span>
+                    <input type="file" id="fileIn" hidden onchange="handleFileUpload(event)">
+                </div>
+                <div class="data-table-container" id="tablePreview" style="display:none"><div id="tableData"></div></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Simulador Operacional</span>
+                    <i class="fa fa-rotate-left" style="cursor:pointer; font-size:11px; color:#666" onclick="location.reload()"></i>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Rota / Cliente</label>
+                    <input type="text" id="inRota" class="frm-input" value="ROTA SINOP - CARGA MISTA">
+                </div>
+
+                <div class="input-grid">
+                    <div class="input-group"><label class="input-label">KM Ida/Volta</label><input type="number" id="inKm" class="frm-input" value="1050" oninput="calculate()"></div>
+                    <div class="input-group"><label class="input-label">Consumo (Km/L)</label><input type="number" id="inKmL" class="frm-input" value="2.2" step="0.1" oninput="calculate()"></div>
+                </div>
+
+                <div class="input-grid">
+                    <div class="input-group"><label class="input-label">Diesel (R$)</label><input type="number" id="inDiesel" class="frm-input" value="6.52" oninput="calculate()"></div>
+                    <div class="input-group"><label class="input-label">Manutenção (R$/Km)</label><input type="number" id="inMaint" class="frm-input" value="0.85" oninput="calculate()"></div>
+                </div>
+
+                 <div class="input-grid">
+                    <div class="input-group"><label class="input-label">Pedágios</label><input type="number" id="inTolls" class="frm-input" value="150" oninput="calculate()"></div>
+                    <div class="input-group"><label class="input-label">Diária Motorista</label><input type="number" id="inDriver" class="frm-input" value="200" oninput="calculate()"></div>
+                </div>
+
+                <hr style="border-top:1px solid #333; margin:15px 0">
+
+                <div class="input-grid">
+                    <div class="input-group"><label class="input-label">Peso Carga (Kg)</label><input type="number" id="inPesoTotal" class="frm-input" value="5000" oninput="calculate()"></div>
+                    <div class="input-group">
+                        <label class="input-label" style="color:var(--brand-gold)">Rateio Fixo (R$/Kg)</label>
+                        <div style="display:flex; gap:5px">
+                            <input type="number" id="inFixo" class="frm-input locked" value="0.14" readonly>
+                            <button onclick="toggleModal(true)" style="background:none; border:1px solid #444; color:#aaa; cursor:pointer; border-radius:4px"><i class="fa fa-edit"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-grid">
+                    <div class="input-group"><label class="input-label">Venda Unit. (R$)</label><input type="number" id="inPrecoUnit" class="frm-input" value="185" style="border-color:var(--brand-gold)" oninput="calculate()"></div>
+                    <div class="input-group"><label class="input-label">Peso Unit. (Kg)</label><input type="number" id="inPesoUnit" class="frm-input" value="10" oninput="calculate()"></div>
+                </div>
+                
+                <div class="input-group"><label class="input-label">Comissão Broker (%)</label><input type="number" id="inCommPerc" class="frm-input" value="30" oninput="calculate()"></div>
+            </div>
         </div>
 
-        <div class="card reverse-calc">
-            <div class="card-header" style="border-bottom-color:rgba(255,255,255,0.1)">
-                <span class="card-title" style="color:white">Simulador de Preço Ideal</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:20px; margin-bottom:15px">
-                <div style="width:120px">
-                    <label class="input-label" style="color:#aaa">Meta Lucro (%)</label>
-                    <input type="number" id="inMeta" class="frm-input" value="15" style="border-color:var(--brand-gold); color:var(--brand-gold); font-weight:bold" oninput="calculate()">
+        <div class="main-col">
+            <div class="card">
+                <div class="card-header"><span class="card-title">Resultado Financeiro</span></div>
+                <div class="kpi-master-row">
+                    <div class="kpi-box" id="boxProfit">
+                        <span class="input-label">Lucro Líquido Real</span>
+                        <span class="kpi-val" id="resLucro">R$ 0,00</span>
+                        <span class="kpi-sub" id="resMargemPerc">0%</span>
+                    </div>
+                    <div class="kpi-box" style="border-top:2px solid var(--brand-gold)">
+                        <span class="input-label">Comissão Broker</span>
+                        <span class="kpi-val" id="resComissao" style="color:var(--brand-gold)">R$ 0,00</span>
+                        <span class="kpi-sub">Receita Bruta</span>
+                    </div>
                 </div>
-                <div style="flex:1; text-align:right">
-                    <label class="input-label" style="color:#aaa">Preço Sugerido (Unitário)</label>
-                    <span id="suggUnit" style="font-size:24px; font-weight:bold; color:var(--brand-gold)">---</span>
-                </div>
+                <div style="height:220px"><canvas id="mainChart"></canvas></div>
             </div>
-            <div style="display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px">
-                <div style="text-align:center"><span id="suggKg" style="display:block; font-weight:bold; color:white">---</span><span style="font-size:9px; color:#aaa">PREÇO/KG</span></div>
-                <div style="text-align:center"><span id="suggKm" style="display:block; font-weight:bold; color:white">---</span><span style="font-size:9px; color:#aaa">RENDIMENTO/KM</span></div>
+
+            <div class="card reverse-calc">
+                <div class="card-header" style="border-bottom-color:rgba(255,255,255,0.1)">
+                    <span class="card-title" style="color:white">Simulador de Preço Ideal</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:20px; margin-bottom:15px">
+                    <div style="width:120px">
+                        <label class="input-label" style="color:#aaa">Meta Lucro (%)</label>
+                        <input type="number" id="inMeta" class="frm-input" value="15" style="border-color:var(--brand-gold); color:var(--brand-gold); font-weight:bold" oninput="calculate()">
+                    </div>
+                    <div style="flex:1; text-align:right">
+                        <label class="input-label" style="color:#aaa">Preço Sugerido (Unitário)</label>
+                        <span id="suggUnit" style="font-size:24px; font-weight:bold; color:var(--brand-gold)">---</span>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px">
+                    <div style="text-align:center"><span id="suggKg" style="display:block; font-weight:bold; color:white">---</span><span style="font-size:9px; color:#aaa">PREÇO/KG</span></div>
+                    <div style="text-align:center"><span id="suggKm" style="display:block; font-weight:bold; color:white">---</span><span style="font-size:9px; color:#aaa">RENDIMENTO/KM</span></div>
+                </div>
             </div>
         </div>
     </div>
